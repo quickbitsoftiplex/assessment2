@@ -3,6 +3,7 @@ const fs = require('fs');
 const { readFile, stat } = require('fs/promises');
 const path = require('path');
 const router = express.Router();
+const { mean } = require('../utils/stats')
 const DATA_PATH = path.join(__dirname, '../../../data/items.json');
 
 let cachedStats = null; // { total, avg price }
@@ -20,7 +21,9 @@ async function getStats() {
   const items = JSON.parse(raw);
 
   const total = items.length;
-  const averagePrice = total === 0 ? 0 : items.reduce((s, x) => s + x.price, 0) / total;
+  const averagePrice = total === 0
+    ? 0
+    : items.reduce((s, x) => s + x.price, 0) / total;
 
   cachedStats = { total, averagePrice };
   cachedMtimeMs = mtimeMs;
