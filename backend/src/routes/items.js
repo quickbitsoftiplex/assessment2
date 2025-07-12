@@ -1,6 +1,13 @@
 const express = require('express');
+const Joi = require('joi');
 const router = express.Router();
 const repo = require('../data/items.repository');
+
+const itemSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  category: Joi.string().min(2).required(),
+  price: Joi.number().positive().required()
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -55,13 +62,21 @@ router.get('/:id', async (req, res, next) => {
 // POST /api/items
 router.post('/', async (req, res, next) => {
   try {
-    // TODO: Validate payload (intentional omission)
-    const item = req.body;
+    const { error, value } = itemSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      return res.status(400).json({
+        message: 'Invalid payload',
+        details: error.details.map(d => d.message)
+      });
+    }
+
     const data = await repo.getAll();
-    item.id = Date.now();
-    data.push(item);
+    const newItem = { ...value, id: Date.now() };
+    data.push(newItem);
     await repo.saveAll(data);
-    res.status(201).json(item);
+
+    res.status(201).json(newItem);
   } catch (err) {
     next(err);
   }

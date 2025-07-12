@@ -40,5 +40,23 @@
     "category": "Furniture",
     "price": 30,
     "id": 2199
+  },
+  {
+    "name": "Ergo Chair",
+    "category": "Furniture",
+    "price": 799,
+    "id": 1752318222146
+  },
+  {
+    "name": "Ergo Chair",
+    "category": "Furniture",
+    "price": 799,
+    "id": 1752318251787
+  },
+  {
+    "name": "Ergo Chair",
+    "category": "Furniture",
+    "price": 799,
+    "id": 1752318425749
   }
 ]
