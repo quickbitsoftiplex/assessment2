@@ -1,7 +1,7 @@
 const { readFile, writeFile } = require('fs/promises');
 const path = require('path');
 
-const DATA_PATH = path.join(__dirname, '../../data/items.json');
+const DATA_PATH = path.join(__dirname, '../../../data/items.json');
 
 // Reads all items from the JSON file and returns a Promise ( non-blocking ) which resolves them as an array.
 async function getAll() {

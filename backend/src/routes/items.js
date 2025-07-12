@@ -1,20 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const repo = require('../data/items.repository');
-// GET /api/items
+
 router.get('/', async (req, res, next) => {
   try {
-    const data = await repo.getAll();
-    const { limit, q } = req.query;
-    let results = data;
+    const allItems = await repo.getAll();
 
-    if (q) {
-      // Simple substring search (sub‑optimal)
-      results = results.filter(item => item.name.toLowerCase().includes(q.toLowerCase()));
-    }
+    // Get query params with defaults
+    const { q = '', limit } = req.query;
 
-    if (limit) {
-      results = results.slice(0, parseInt(limit));
+    // Normalise helper -> removes accents, lowercases, trims
+    const normalize = str =>
+      str
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase()
+        .trim();
+
+    const query = normalize(q);
+
+    // Filter by search term if provided
+    let results = query
+      ? allItems.filter(item => normalize(item.name).includes(query))
+      : allItems;
+
+    // Apply limit if provided
+    const parsedLimit = parseInt(limit);
+    if (!isNaN(parsedLimit) && parsedLimit > 0) {
+      results = results.slice(0, parsedLimit);
     }
 
     res.json(results);

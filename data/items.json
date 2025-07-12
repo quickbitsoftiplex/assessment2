@@ -34,5 +34,11 @@
     "category": "Demo",
     "price": 99,
     "id": 1752316257709
+  },
+  {
+    "name": "Café Table",
+    "category": "Furniture",
+    "price": 30,
+    "id": 2199
   }
 ]
